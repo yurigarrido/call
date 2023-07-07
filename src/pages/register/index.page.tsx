@@ -44,8 +44,8 @@ export default function Register() {
   async function handleRegister(data: RegisterFormData) {
     try {
       await api.post('/users', { name: data.name, username: data.username })
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
     }
   }
 
