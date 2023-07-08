@@ -4,6 +4,7 @@ import { ArrowRight } from 'phosphor-react'
 import { z } from 'zod'
 import { api } from '@/src/lib/axios'
 import { ConnectBox, ConnectItem } from './styles'
+import { signIn, useSession } from 'next-auth/react'
 
 const registerFormSchema = z.object({
   username: z
@@ -18,16 +19,14 @@ const registerFormSchema = z.object({
     .min(3, { message: 'o nome precisa ter pelo menos 3 letras' }),
 })
 
-type RegisterFormData = z.infer<typeof registerFormSchema>
-
 export default function Register() {
-  async function handleRegister(data: RegisterFormData) {
-    try {
-      await api.post('/users', { name: data.name, username: data.username })
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // async function handleRegister(data: RegisterFormData) {
+  //   try {
+  //     await api.post('/users', { name: data.name, username: data.username })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
   return (
     <Container>
@@ -44,7 +43,11 @@ export default function Register() {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Calendar</Text>
-          <Button variant="secondary" size="sm">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => signIn('google')}
+          >
             Conectar
             <ArrowRight />
           </Button>
