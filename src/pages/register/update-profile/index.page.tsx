@@ -1,14 +1,24 @@
-import { Button, Heading, MultiStep, Text, TextArea } from '@ignite-ui/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Avatar,
+  Button,
+  Heading,
+  MultiStep,
+  Text,
+  TextArea,
+} from '@ignite-ui/react'
+import { GetServerSideProps } from 'next'
+import { unstable_getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { ArrowRight } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '../../../lib/axios'
 import { Container, Header } from '../styles'
 import { FormAnnotation, ProfileBox } from './styles'
-import { useSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
-import { unstable_getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../../api/auth/[...nextauth].api'
+
 const updateProfileSchema = z.object({
   bio: z.string(),
 })
@@ -20,14 +30,20 @@ export default function UpdateProfile() {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm({
+  } = useForm<UpdateProfileData>({
     resolver: zodResolver(updateProfileSchema),
   })
 
   const session = useSession()
-  console.log(session)
+  const router = useRouter()
 
-  async function handleUpdateProfile(data: UpdateProfileData) {}
+  async function handleUpdateProfile(data: UpdateProfileData) {
+    await api.put('/users/profile', {
+      bio: data.bio,
+    })
+
+    await router.push(`/schedule/${session.data?.user.username}`)
+  }
 
   return (
     <Container>
@@ -43,18 +59,23 @@ export default function UpdateProfile() {
 
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
         <label>
-          <Text size="sm">Foto de perfil</Text>
+          <Text>Foto de perfil</Text>
+          <Avatar
+            src={session.data?.user.avatar_url}
+            referrerPolicy="no-referrer"
+            alt={session.data?.user.name}
+          />
         </label>
 
         <label>
           <Text size="sm">Sobre você</Text>
           <TextArea {...register('bio')} />
           <FormAnnotation size="sm">
-            Fale um pouco sobre você. Isto será exibido em sua página pessoal
+            Fale um pouco sobre você. Isto será exibido em sua página pessoal.
           </FormAnnotation>
         </label>
 
-        <Button disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           Finalizar
           <ArrowRight />
         </Button>
