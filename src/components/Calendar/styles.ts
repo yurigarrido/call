@@ -1,6 +1,6 @@
-import { Text, styled } from '@ignite-ui/react'
+import { styled, Text } from '@ignite-ui/react'
 
-export const CalendarContaier = styled('div', {
+export const CalendarContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$6',
@@ -34,8 +34,8 @@ export const CalendarActions = styled('div', {
     borderRadius: '$sm',
 
     svg: {
-      height: '$5',
       width: '$5',
+      height: '$5',
     },
 
     '&:hover': {
@@ -61,9 +61,9 @@ export const CalendarBody = styled('table', {
   },
 
   'tbody:before': {
+    lineHeight: '0.75rem',
     content: '.',
     display: 'block',
-    lineHeight: '0.75rem',
     color: '$gray800',
   },
 
@@ -75,23 +75,23 @@ export const CalendarBody = styled('table', {
 export const CalendarDay = styled('button', {
   all: 'unset',
   width: '100%',
-  aspectRatio: '1/1',
-  backgroundColor: '$gray600',
-  cursor: 'pointer',
+  aspectRatio: '1 / 1',
+  background: '$gray600',
   textAlign: 'center',
+  cursor: 'pointer',
   borderRadius: '$sm',
 
   '&:disabled': {
     background: 'none',
     cursor: 'default',
-    opacity: '0.4',
-  },
-
-  '&:focus': {
-    boxShadow: '0 0 0 2px $colors$gray100',
+    opacity: 0.4,
   },
 
   '&:not(:disabled):hover': {
     background: '$gray500',
+  },
+
+  '&:focus': {
+    boxShadow: '0 0 0 2px $colors$gray100',
   },
 })
