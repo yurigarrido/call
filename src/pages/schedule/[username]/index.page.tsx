@@ -3,7 +3,7 @@ import { Container, UserHeader } from './styles'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { prisma } from '@/src/lib/prisma'
 import { ScheduleForm } from './ScheduleForm'
-
+import { NextSeo } from 'next-seo'
 interface ScheduleProps {
   user: {
     name: string
@@ -14,14 +14,17 @@ interface ScheduleProps {
 
 export default function Schedule({ user }: ScheduleProps) {
   return (
-    <Container>
-      <UserHeader>
-        <Avatar src={user.avatarUrl} />
-        <Heading>{user.name}</Heading>
-        <Text> {user.bio}</Text>
-      </UserHeader>
-      <ScheduleForm />
-    </Container>
+    <>
+      <NextSeo title={`Agendar com ${user.name} | Call`} />
+      <Container>
+        <UserHeader>
+          <Avatar src={user.avatarUrl} />
+          <Heading>{user.name}</Heading>
+          <Text> {user.bio}</Text>
+        </UserHeader>
+        <ScheduleForm />
+      </Container>
+    </>
   )
 }
 
@@ -33,7 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const username = params?.username
+  const username = String(params?.username)
 
   const user = await prisma.user.findUnique({
     where: {
