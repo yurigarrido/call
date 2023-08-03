@@ -22,7 +22,7 @@ export default async function handler(
   })
 
   if (!user) {
-    return res.status(400).json({ message: 'User does not exist' })
+    return res.status(400).json({ message: 'User does not exist.' })
   }
 
   const createSchedulingBody = z.object({
